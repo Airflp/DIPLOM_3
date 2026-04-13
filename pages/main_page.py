@@ -1,5 +1,3 @@
-import time
-
 from selenium.webdriver.support import expected_conditions as EC
 
 from pages.base_page import BasePage
@@ -22,18 +20,25 @@ class MainPage(BasePage):
         except Exception:
             self.close_modal_with_escape()
 
+    def is_ingredient_modal_opened(self):
+        return self.wait_for_visibility(MainPageLocators.INGREDIENT_MODAL).is_displayed()
+
+    def is_ingredient_modal_closed(self):
+        return self.wait_for_invisibility(MainPageLocators.INGREDIENT_MODAL)
+
     def add_items_to_constructor(self):
         self.drag_and_drop(
             MainPageLocators.BUN_CARD,
             MainPageLocators.BURGER_CONSTRUCTOR_DROP_AREA
         )
-        time.sleep(1)
+        self.wait.until(
+            lambda d: self.get_bun_counter() == "2"
+        )
 
         self.drag_and_drop(
             MainPageLocators.FILLING_CARD,
             MainPageLocators.BURGER_CONSTRUCTOR_DROP_AREA
         )
-        time.sleep(1)
 
     def get_bun_counter(self):
         return self.get_text(MainPageLocators.BUN_COUNTER)
@@ -48,17 +53,18 @@ class MainPage(BasePage):
 
     def create_order(self):
         button = self.wait_order_button_present()
-
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block:'center'});",
-            button
-        )
-        time.sleep(1)
+        self.scroll_to_element(button)
 
         try:
             button.click()
         except Exception:
-            self.driver.execute_script("arguments[0].click();", button)
+            self.click_with_js(button)
 
     def get_order_number(self):
         return self.get_text(MainPageLocators.ORDER_MODAL_NUMBER)
+
+    def is_feed_opened(self):
+        return "feed" in self.get_current_url()
+
+    def is_constructor_opened(self):
+        return "feed" not in self.get_current_url()

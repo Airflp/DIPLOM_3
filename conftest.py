@@ -1,6 +1,5 @@
 import random
 import string
-import time
 
 import pytest
 import requests
@@ -58,7 +57,6 @@ def driver(request):
                 break
             except WebDriverException as error:
                 last_error = error
-                time.sleep(2)
 
         if driver is None:
             raise last_error
@@ -72,16 +70,12 @@ def driver(request):
 @pytest.fixture(autouse=True)
 def reset_app_state(driver):
     driver.get(BASE_URL)
-    time.sleep(1)
-
     driver.execute_script("""
         const overlays = document.querySelectorAll('[class*="Modal_modal_overlay"]');
         overlays.forEach(el => el.remove());
-
         document.body.style.overflow = 'auto';
     """)
-
-    yield
+    return
 
 
 @pytest.fixture
