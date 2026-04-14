@@ -62,6 +62,7 @@ class TestConstructor:
         main_page.add_items_to_constructor()
         main_page.wait_order_button_present()
         main_page.create_order()
+        main_page.wait_order_number_visible()
 
         order_number = main_page.get_order_number()
         assert int(order_number) > 0

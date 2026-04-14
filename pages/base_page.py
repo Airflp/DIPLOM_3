@@ -60,15 +60,6 @@ class BasePage:
     def get_current_url(self):
         return self.driver.current_url
 
-    def is_visible(self, locator, timeout=5):
-        try:
-            WebDriverWait(self.driver, timeout).until(
-                EC.visibility_of_element_located(locator)
-            )
-            return True
-        except TimeoutException:
-            return False
-
     def find_elements(self, locator):
         return self.driver.find_elements(*locator)
 
@@ -102,7 +93,6 @@ class BasePage:
                 """
                 const source = arguments[0];
                 const target = arguments[1];
-
                 const dataTransfer = new DataTransfer();
 
                 source.dispatchEvent(new DragEvent('dragstart', {
