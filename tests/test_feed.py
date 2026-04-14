@@ -1,4 +1,3 @@
-import time
 import allure
 
 from data.urls import BASE_URL, FEED_URL, LOGIN_URL
@@ -27,9 +26,10 @@ class TestFeed:
         main_page.add_items_to_constructor()
         main_page.wait_order_button_present()
         main_page.create_order()
-        time.sleep(5)
+        main_page.wait_order_number_visible()
 
         feed_page.open(FEED_URL)
+        feed_page.wait_total_done_changed(total_before)
         total_after = feed_page.get_total_done()
 
         assert total_after >= total_before
@@ -52,9 +52,10 @@ class TestFeed:
         main_page.add_items_to_constructor()
         main_page.wait_order_button_present()
         main_page.create_order()
-        time.sleep(5)
+        main_page.wait_order_number_visible()
 
         feed_page.open(FEED_URL)
+        feed_page.wait_total_today_changed(total_before)
         total_after = feed_page.get_total_today()
 
         assert total_after >= total_before
@@ -77,6 +78,7 @@ class TestFeed:
         main_page.add_items_to_constructor()
         main_page.wait_order_button_present()
         main_page.create_order()
+        main_page.wait_order_number_visible()
 
         feed_page.open(FEED_URL)
         appeared = feed_page.wait_for_new_order_in_work(before_orders)

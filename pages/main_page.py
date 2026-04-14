@@ -21,7 +21,9 @@ class MainPage(BasePage):
             self.close_modal_with_escape()
 
     def is_ingredient_modal_opened(self):
-        return self.wait_for_visibility(MainPageLocators.INGREDIENT_MODAL).is_displayed()
+        return self.wait_for_visibility(
+            MainPageLocators.INGREDIENT_MODAL
+        ).is_displayed()
 
     def is_ingredient_modal_closed(self):
         return self.wait_for_invisibility(MainPageLocators.INGREDIENT_MODAL)
@@ -31,9 +33,7 @@ class MainPage(BasePage):
             MainPageLocators.BUN_CARD,
             MainPageLocators.BURGER_CONSTRUCTOR_DROP_AREA
         )
-        self.wait.until(
-            lambda d: self.get_bun_counter() == "2"
-        )
+        self.wait.until(lambda d: self.get_bun_counter() == "2")
 
         self.drag_and_drop(
             MainPageLocators.FILLING_CARD,
@@ -59,6 +59,9 @@ class MainPage(BasePage):
             button.click()
         except Exception:
             self.click_with_js(button)
+
+    def wait_order_number_visible(self):
+        return self.wait_for_visibility(MainPageLocators.ORDER_MODAL_NUMBER)
 
     def get_order_number(self):
         return self.get_text(MainPageLocators.ORDER_MODAL_NUMBER)
